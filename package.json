@@ -1,0 +1,76 @@
+{
+    "name": "sqltools-firebird-driver",
+    "displayName": "SQLTools Firebird",
+    "description": "SQLTools Firebird",
+    "version": "0.0.1",
+    "engines": {
+      "vscode": "^1.72.0"
+    },
+    "publisher": "fzhem",
+    "license": "MIT",
+    "private": true,
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/fzhem/sqltools-firebird-driver.git"
+    },
+    "bugs": {
+      "url": "https://github.com/fzhem/sqltools-firebird-driver/issues"
+    },
+    "keywords": [
+      "sqltools-driver",
+      "firebird"
+    ],
+    "galleryBanner": {
+      "theme": "light",
+      "color": "#ffffff"
+    },
+    "icon": "icon.png",
+    "categories": [
+      "Programming Languages",
+      "Snippets",
+      "Formatters",
+      "Other"
+    ],
+    "extensionDependencies": [
+      "mtxr.sqltools"
+    ],
+    "activationEvents": [
+      "*",
+      "onLanguage:sql",
+      "onCommand:sqltools.*"
+    ],
+    "main": "./out/extension.js",
+    "scripts": {
+      "clean": "rimraf out --glob *.vsix",
+      "predev": "npm run clean",
+      "dev": "npm run watch",
+      "esbuild": "esbuild --bundle --external:vscode --platform=node --tsconfig=./tsconfig.json --log-level=info --color=true --format=cjs",
+      "compile:ext": "npm run esbuild -- ./src/extension.ts --outfile=./out/extension.js --define:process.env.PRODUCT=\"'ext'\"",
+      "compile:ls": "npm run esbuild -- ./src/ls/plugin.ts --outfile=./out/ls/plugin.js --define:process.env.PRODUCT=\"'ls'\"",
+      "watch": "concurrently \"npm:watch:*\"",
+      "watch:ext": "npm run compile:ext -- --define:process.env.NODE_ENV=\"'development'\" --sourcemap --watch",
+      "watch:ls": "npm run compile:ls -- --define:process.env.NODE_ENV=\"'development'\" --sourcemap --watch",
+      "prebuild": "npm run clean",
+      "build": "cross-env NODE_ENV=production concurrently \"npm:build:*\"",
+      "build:ext": "npm run compile:ext -- --define:process.env.NODE_ENV=\"'production'\" --minify",
+      "build:ls": "npm run compile:ls -- --define:process.env.NODE_ENV=\"'production'\" --minify",
+      "prepackage": "npm run build"
+    },
+    "dependencies": {
+      "@sqltools/base-driver": "latest",
+      "@sqltools/types": "latest",
+      "node-firebird": "^1.1.9",
+      "uuid": "^10.0.0"
+    },
+    "devDependencies": {
+      "@types/uuid": "^10.0.0",
+      "@types/vscode": "^1.93.0",
+      "@vscode/vsce": "^3.1.0",
+      "concurrently": "^9.0.0",
+      "cross-env": "^7.0.3",
+      "esbuild": "^0.23.1",
+      "rimraf": "^6.0.1",
+      "typescript": "^5.6.2"
+    }
+  }
+  
