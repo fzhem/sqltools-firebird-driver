@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "definitions": {
+    "database": {
+      "title": "Database Name",
+      "type": "string",
+      "minLength": 1
+    },
+    "username": {
+      "title": "User",
+      "type": "string",
+      "minLength": 1
+    },
+    "usePassword": {
+      "title": "Password",
+      "type": "string",
+      "enum": [
+        "SQLTools Driver Credentials",
+        "Ask on connect",
+        "Use empty password",
+        "Save password"
+      ],
+      "default": "SQLTools Driver Credentials"
+    },
+    "password": {
+      "title": "Password",
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "properties": {
+    "host": {
+      "title": "Host",
+      "type": "string",
+      "minLength": 1
+    },
+    "port": {
+      "title": "Port",
+      "type": "integer",
+      "minimum": 1,
+      "default": 3050
+    },
+    "database": {
+      "$ref": "#/definitions/database"
+    },
+    "username": {
+      "$ref": "#/definitions/username"
+    },
+    "usePassword": {
+      "$ref": "#/definitions/usePassword"
+    },
+    "firebirdOptions": {
+      "type": "object",
+      "title": "Firebird SQL driver options",
+      "properties": {
+        "lowercase_keys": {
+          "type": "boolean",
+          "default": false
+        },
+        "role": {
+          "type": "string",
+          "default": null
+        },
+        "pageSize": {
+          "type": "integer",
+          "default": 4096
+        },
+        "retryConnectionInterval": {
+          "type": "integer",
+          "default": 1000
+        },
+        "blobAsText": {
+          "type": "boolean",
+          "default": false
+        },
+        "encoding": {
+          "type": "string",
+          "default": "UTF8"
+        }
+      }
+    }
+  },
+  "required": ["host", "port", "database", "username"],
+  "if": {
+    "properties": {
+      "usePassword": {
+        "enum": ["Ask on connect"]
+      }
+    }
+  },
+  "then": {
+    "properties": {
+      "askForPassword": {
+        "type": "boolean",
+        "default": true
+      }
+    }
+  },
+  "else": {
+    "if": {
+      "properties": {
+        "usePassword": {
+          "enum": ["Save password"]
+        }
+      }
+    },
+    "then": {
+      "properties": {
+        "password": {
+          "$ref": "#/definitions/password"
+        }
+      }
+    }
+  }
+}

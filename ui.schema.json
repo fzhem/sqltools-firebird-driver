@@ -1,0 +1,23 @@
+{
+  "ui:order": [
+    "host",
+    "port",
+    "database",
+    "username",
+    "usePassword",
+    "password",
+    "firebirdOptions"
+  ],
+  "password": { "ui:widget": "password" },
+  "firebirdOptions": {
+    "lowercase_keys": {
+      "ui:help": "Set to true to lowercase keys"
+    },
+    "retryConnectionInterval": {
+      "ui:help": "Reconnect interval in case of connection drop"
+    },
+    "blobAsText": {
+      "ui:help": "Set to true to get blob as text, only affects blob subtype 1"
+    }
+  }
+}
