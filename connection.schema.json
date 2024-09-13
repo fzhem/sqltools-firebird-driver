@@ -59,7 +59,7 @@
           "default": false
         },
         "role": {
-          "type": "string",
+          "type": ["string", "null"],
           "default": null
         },
         "pageSize": {
