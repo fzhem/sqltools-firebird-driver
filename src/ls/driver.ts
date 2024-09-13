@@ -175,7 +175,7 @@ export default class FirebirdSQL
       page?: number;
     }
   ): Promise<NSDatabase.IResult<any>[]> {
-    return await this.query(`SELECT TOP ${opt.limit} * FROM ${table.schema}.${table.label}`)
+    return await this.query(`SELECT * FROM ${table.label} ROWS ${opt.limit}`)
   }
 
   private async getChildrenForGroup({
