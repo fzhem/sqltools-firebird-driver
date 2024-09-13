@@ -9,7 +9,7 @@ jobs:
   once:
     permissions:
       contents: write # for creating release
-    name: Create release and ubuntu build
+    name: Create vsix
     runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -49,7 +49,7 @@ jobs:
       - name: Rename and move VSIX file
         id: rename_vsix_ubuntu
         run: |
-          old_name="${{ steps.get_package_name_ubuntu.outputs.name }}-linux-x64-${{ steps.get_package_version_ubuntu.outputs.version }}.vsix"
+          old_name="${{ steps.get_package_name_ubuntu.outputs.name }}-${{ steps.get_package_version_ubuntu.outputs.version }}.vsix"
           new_name="${old_name%.*}-${{ steps.get_commit_hash_ubuntu.outputs.hash }}.vsix"
           mkdir -p releases
           mv "$old_name" "releases/$new_name"
