@@ -3,7 +3,7 @@
 SQLTools driver for [Firebird](https://firebirdsql.org/) DBMS
 
 ## Screenshots
-![connection-assistant.jpg](screenshots\connection-assistant.jpg)
+![connection-assistant.jpg](https://raw.githubusercontent.com/fzhem/sqltools-firebird-driver/main/screenshots/connection-assistant.jpg)
 
 ## Changelog
 
