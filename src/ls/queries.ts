@@ -20,12 +20,63 @@ AND    RDB$OWNER_NAME = '${p => p.schema}'
 `;
 
 export const fetchColumns: IBaseQueries['fetchColumns'] = queryFactory`
-SELECT   TRIM(RF.RDB$FIELD_NAME)        AS "label"
-       , TRIM('${ContextValue.COLUMN}') AS "type"
-       , TRIM('${p => p.label}')        AS "table"
-FROM     RDB$RELATION_FIELDS RF
-JOIN     RDB$FIELDS F ON RF.RDB$FIELD_SOURCE = F.RDB$FIELD_NAME
-WHERE    RF.RDB$RELATION_NAME = '${p => p.label}'
-ORDER BY RF.RDB$FIELD_POSITION;
+SELECT TRIM(rf.RDB$FIELD_NAME)        AS "label"
+     , TRIM('${ContextValue.COLUMN}') AS "type"
+     , TRIM('${p => p.label}')        AS "table" 
+     , TRIM(CASE f.RDB$FIELD_TYPE
+              WHEN 7 THEN 'SMALLINT'
+              WHEN 8 THEN 'INTEGER'
+              WHEN 9 THEN 'QUAD'
+              WHEN 10 THEN 'FLOAT'
+              WHEN 12 THEN 'DATE'
+              WHEN 13 THEN 'TIME'
+              WHEN 14 THEN 'CHAR'
+              WHEN 16 THEN 'BIGINT'
+              WHEN 27 THEN 'DOUBLE PRECISION'
+              WHEN 35 THEN 'TIMESTAMP'
+              WHEN 37 THEN 'VARCHAR'
+              WHEN 40 THEN 'CSTRING'
+              WHEN 261 THEN 'BLOB'
+              ELSE 'UNKNOWN'
+            END)                      AS "dataType"
+     , TRIM(CASE
+              WHEN f.RDB$FIELD_LENGTH > 0 THEN
+                  CASE f.RDB$FIELD_TYPE
+                      WHEN 7 THEN 'SMALLINT'
+                      WHEN 8 THEN 'INTEGER'
+                      WHEN 9 THEN 'QUAD'
+                      WHEN 10 THEN 'FLOAT'
+                      WHEN 12 THEN 'DATE'
+                      WHEN 13 THEN 'TIME'
+                      WHEN 14 THEN 'CHAR'
+                      WHEN 16 THEN 'BIGINT'
+                      WHEN 27 THEN 'DOUBLE PRECISION'
+                      WHEN 35 THEN 'TIMESTAMP'
+                      WHEN 37 THEN 'VARCHAR'
+                      WHEN 40 THEN 'CSTRING'
+                      WHEN 261 THEN 'BLOB'
+                      ELSE 'UNKNOWN'
+                  END || '(' || f.RDB$FIELD_LENGTH || ')'
+              ELSE
+                  CASE f.RDB$FIELD_TYPE
+                      WHEN 7 THEN 'SMALLINT'
+                      WHEN 8 THEN 'INTEGER'
+                      WHEN 9 THEN 'QUAD'
+                      WHEN 10 THEN 'FLOAT'
+                      WHEN 12 THEN 'DATE'
+                      WHEN 13 THEN 'TIME'
+                      WHEN 14 THEN 'CHAR'
+                      WHEN 16 THEN 'BIGINT'
+                      WHEN 27 THEN 'DOUBLE PRECISION'
+                      WHEN 35 THEN 'TIMESTAMP'
+                      WHEN 37 THEN 'VARCHAR'
+                      WHEN 40 THEN 'CSTRING'
+                      WHEN 261 THEN 'BLOB'
+                      ELSE 'UNKNOWN'
+                  END
+            END) AS "detail"
+FROM   RDB$RELATION_FIELDS rf
+JOIN   RDB$FIELDS          f ON rf.RDB$FIELD_SOURCE = f.RDB$FIELD_NAME
+WHERE  rf.RDB$RELATION_NAME = '${p => p.label}'
 `
 
