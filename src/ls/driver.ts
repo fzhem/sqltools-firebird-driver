@@ -184,9 +184,9 @@ export default class FirebirdSQL
   }: Arg0<IConnectionDriver["getChildrenForItem"]>) {
     switch (item.childType) {
       case ContextValue.TABLE:
-        return this.queryResults(this.queries.fetchTables(parent as NSDatabase.ISchema))
+        return this.queryResults(this.queries.fetchTables(parent as NSDatabase.ISchema));
       case ContextValue.VIEW:
-        return [];
+        return this.queryResults(this.queries.fetchViews(parent as NSDatabase.ISchema));
     }
   }
 

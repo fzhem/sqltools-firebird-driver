@@ -16,6 +16,16 @@ SELECT TRIM(RDB$RELATION_NAME)       AS "label"
      , TRIM('${ContextValue.TABLE}') AS "type"
 FROM   RDB$RELATIONS 
 WHERE  RDB$SYSTEM_FLAG = 0
+AND    RDB$VIEW_BLR is null
+AND    RDB$OWNER_NAME = '${p => p.schema}'
+`;
+
+export const fetchViews: IBaseQueries['fetchTables'] = queryFactory`
+SELECT TRIM(RDB$RELATION_NAME)       AS "label"
+     , TRIM('${ContextValue.VIEW}') AS "type"
+FROM   RDB$RELATIONS 
+WHERE  RDB$SYSTEM_FLAG = 0
+AND    RDB$VIEW_BLR is not null
 AND    RDB$OWNER_NAME = '${p => p.schema}'
 `;
 
