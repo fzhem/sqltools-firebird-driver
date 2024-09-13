@@ -2,6 +2,10 @@
 
 ## Changelog
 
+### 0.0.5
+
+- Add query autocompletion
+
 ### 0.0.4
 
 - Add query to fetch views in side panel

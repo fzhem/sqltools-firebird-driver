@@ -201,4 +201,15 @@ export default class FirebirdSQL
       table: parent,
     }));
   }
+
+  public searchItems(itemType: ContextValue, search: string, extraParams: any = {}) {
+    switch (itemType) {
+      case ContextValue.TABLE:
+        console.log('hereeee')
+        return this.queryResults(this.queries.searchTables({ search }));
+      case ContextValue.COLUMN:
+        console.log('hereeee.......')
+        return this.queryResults(this.queries.searchColumns({ search, ...extraParams }));
+    }
+  }
 }
