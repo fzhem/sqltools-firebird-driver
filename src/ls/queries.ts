@@ -75,8 +75,29 @@ SELECT TRIM(rf.RDB$FIELD_NAME)        AS "label"
                       ELSE 'UNKNOWN'
                   END
             END) AS "detail"
+    , CASE 
+        WHEN EXISTS (
+            SELECT 1 
+            FROM RDB$RELATION_CONSTRAINTS rc
+            JOIN RDB$INDEX_SEGMENTS sg ON rc.RDB$INDEX_NAME = sg.RDB$INDEX_NAME
+            WHERE rc.RDB$RELATION_NAME = rf.RDB$RELATION_NAME
+            AND rc.RDB$CONSTRAINT_TYPE = 'PRIMARY KEY'
+            AND sg.RDB$FIELD_NAME = rf.RDB$FIELD_NAME
+        ) THEN 1
+        ELSE 0
+      END AS "isPk"
+    , CASE 
+        WHEN EXISTS (
+            SELECT 1 
+            FROM RDB$RELATION_CONSTRAINTS rc
+            JOIN RDB$INDEX_SEGMENTS sg ON rc.RDB$INDEX_NAME = sg.RDB$INDEX_NAME
+            WHERE rc.RDB$RELATION_NAME = rf.RDB$RELATION_NAME
+            AND rc.RDB$CONSTRAINT_TYPE = 'FOREIGN KEY'
+            AND sg.RDB$FIELD_NAME = rf.RDB$FIELD_NAME
+        ) THEN 1
+        ELSE 0
+      END AS "isFk"
 FROM   RDB$RELATION_FIELDS rf
 JOIN   RDB$FIELDS          f ON rf.RDB$FIELD_SOURCE = f.RDB$FIELD_NAME
 WHERE  rf.RDB$RELATION_NAME = '${p => p.label}'
 `
-

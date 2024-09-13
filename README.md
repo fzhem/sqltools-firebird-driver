@@ -2,6 +2,10 @@
 
 ## Changelog
 
+### 0.0.3
+
+- Add primary key/foreign key indicator in side panel
+
 ### 0.0.2
 
 - Add column data types in side panel
