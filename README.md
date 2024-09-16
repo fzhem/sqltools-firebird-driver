@@ -2,6 +2,10 @@
 
 SQLTools driver for [Firebird](https://firebirdsql.org/) DBMS
 
+## Limitations
+
+- WireCrypt is currently not supported. Read more here in Firebird 3.0 Support section: https://www.npmjs.com/package/node-firebird
+
 ## Screenshots
 ![connection-assistant.jpg](https://raw.githubusercontent.com/fzhem/sqltools-firebird-driver/main/screenshots/connection-assistant.jpg)
 
