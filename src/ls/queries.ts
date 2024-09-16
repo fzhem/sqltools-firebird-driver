@@ -126,7 +126,7 @@ ${p => p.search ? `AND TRIM(LOWER(RDB$RELATION_NAME)) LIKE '%${p.search.toLowerC
 export const searchColumns: IBaseQueries['searchColumns'] = queryFactory`
 SELECT   TRIM(rf.RDB$FIELD_NAME)        AS "label"
        , TRIM('${ContextValue.COLUMN}') AS "type"
-       , TRIM('${p => p.label}')        AS "table" 
+       , TRIM(rf.RDB$RELATION_NAME)      AS "table" 
        , TRIM(CASE f.RDB$FIELD_TYPE
                 WHEN 7 THEN 'SMALLINT'
                 WHEN 8 THEN 'INTEGER'

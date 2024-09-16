@@ -11,6 +11,7 @@ import {
   MConnectionExplorer,
 } from "@sqltools/types";
 import { v4 as generateId } from "uuid";
+import keywordsCompletion from "./keywords";
 
 export default class FirebirdSQL
   extends AbstractDriver<any, any>
@@ -26,12 +27,14 @@ export default class FirebirdSQL
     if (this.connection) {
       return this.connection;
     }
-    
+
     this.connection = this.openConnection(this.credentials);
     return this.connection;
   }
 
-  private async openConnection(credentials: IConnection<unknown>): Promise<unknown> {
+  private async openConnection(
+    credentials: IConnection<unknown>
+  ): Promise<unknown> {
     return new Promise((resolve, reject) => {
       const options = {
         host: credentials.host,
@@ -42,16 +45,17 @@ export default class FirebirdSQL
         lowercase_keys: credentials.firebirdOptions.lowercase_keys,
         role: credentials.firebirdOptions.role,
         pageSize: credentials.firebirdOptions.pageSize,
-        retryConnectionInterval: credentials.firebirdOptions.retryConnectionInterval,
+        retryConnectionInterval:
+          credentials.firebirdOptions.retryConnectionInterval,
         blobAsText: credentials.firebirdOptions.blobAsText,
-        encoding: credentials.firebirdOptions.encoding
+        encoding: credentials.firebirdOptions.encoding,
       };
-  
+
       Firebird.attach(options, (err, db) => {
         if (err) {
           return reject(err);
         }
-  
+
         // Return the db connection to be used elsewhere
         resolve(db);
       });
@@ -121,10 +125,7 @@ export default class FirebirdSQL
     }
   }
 
-  private async executeQuery(
-    conn,
-    query: string
-  ): Promise<any[]> {
+  private async executeQuery(conn, query: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
       conn.query(query, (err, results) => {
         if (err) {
@@ -175,7 +176,7 @@ export default class FirebirdSQL
       page?: number;
     }
   ): Promise<NSDatabase.IResult<any>[]> {
-    return await this.query(`SELECT * FROM ${table.label} ROWS ${opt.limit}`)
+    return await this.query(`SELECT * FROM ${table.label} ROWS ${opt.limit}`);
   }
 
   private async getChildrenForGroup({
@@ -184,9 +185,13 @@ export default class FirebirdSQL
   }: Arg0<IConnectionDriver["getChildrenForItem"]>) {
     switch (item.childType) {
       case ContextValue.TABLE:
-        return this.queryResults(this.queries.fetchTables(parent as NSDatabase.ISchema));
+        return this.queryResults(
+          this.queries.fetchTables(parent as NSDatabase.ISchema)
+        );
       case ContextValue.VIEW:
-        return this.queryResults(this.queries.fetchViews(parent as NSDatabase.ISchema));
+        return this.queryResults(
+          this.queries.fetchViews(parent as NSDatabase.ISchema)
+        );
     }
   }
 
@@ -202,14 +207,22 @@ export default class FirebirdSQL
     }));
   }
 
-  public searchItems(itemType: ContextValue, search: string, extraParams: any = {}) {
+  public async searchItems(
+    itemType: ContextValue,
+    search: string,
+    extraParams: any = {}
+  ) {
     switch (itemType) {
       case ContextValue.TABLE:
-        console.log('hereeee')
         return this.queryResults(this.queries.searchTables({ search }));
       case ContextValue.COLUMN:
-        console.log('hereeee.......')
-        return this.queryResults(this.queries.searchColumns({ search, ...extraParams }));
+        return this.queryResults(
+          this.queries.searchColumns({ search, ...extraParams })
+        );
     }
   }
+
+  public getStaticCompletions = async () => {
+    return keywordsCompletion;
+  };
 }
