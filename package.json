@@ -60,7 +60,7 @@
         "@sqltools/base-driver": "latest",
         "@sqltools/types": "latest",
         "node-firebird": "^1.1.9",
-        "uuid": "^10.0.0"
+        "uuid": "^11.0.3"
     },
     "devDependencies": {
         "@types/node": "^22.5.4",
